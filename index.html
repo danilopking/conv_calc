@@ -1,386 +1,234 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Event Date Finder</title>
+<title>Калькулятор Event-маркетинга</title>
 <style>
-    :root {
-        --primary: #2d3436;
-        --accent: #0984e3;
-        --danger: #d63031;
-        --success: #00b894;
-        --bg: #f5f6fa;
-    }
     body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background-color: var(--bg);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #f4f4f4;
         display: flex;
         justify-content: center;
-        padding: 20px;
+        align-items: center;
+        min-height: 100vh;
         margin: 0;
     }
-    .wizard-card {
-        background: white;
-        width: 100%;
-        max-width: 700px;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        min-height: 550px;
-    }
-    
-    .wizard-header {
-        padding: 20px 30px;
-        background: white;
-        border-bottom: 1px solid #eee;
-    }
-    .progress-bar {
-        height: 6px;
-        background: #eee;
-        border-radius: 3px;
-        margin-top: 15px;
-        overflow: hidden;
-    }
-    .progress-fill {
-        height: 100%;
-        background: var(--accent);
-        width: 10%;
-        transition: width 0.3s ease;
-    }
-
-    .step-content {
-        padding: 30px;
-        flex: 1;
-        display: none; 
-    }
-    .step-content.active {
-        display: block;
-        animation: fadeIn 0.4s;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(5px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    h2 { margin-top: 0; color: var(--primary); }
-    p { color: #636e72; line-height: 1.5; }
-
-    .form-group { margin-bottom: 20px; }
-    label { display: block; margin-bottom: 8px; font-weight: 600; color: #2d3436; }
-    input[type="date"] {
-        padding: 10px; border: 1px solid #dfe6e9; border-radius: 6px; width: 100%; font-size: 16px;
-        font-family: inherit;
-    }
-    .blocked-list {
-        margin-top: 10px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    .blocked-tag {
-        background: #ffeaa7;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-    .blocked-tag span { cursor: pointer; font-weight: bold; color: var(--danger); }
-    
-    .weekdays-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-        gap: 10px;
-    }
-    .weekday-check {
-        border: 1px solid #dfe6e9;
-        padding: 10px;
-        text-align: center;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.2s;
-        font-weight: 500;
-    }
-    .weekday-check.selected {
-        background: var(--accent);
-        color: white;
-        border-color: var(--accent);
-    }
-
-    .wizard-footer {
-        padding: 20px 30px;
-        border-top: 1px solid #eee;
-        display: flex;
-        justify-content: space-between;
+    .calculator-card {
         background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 500px;
     }
-    button {
-        padding: 12px 24px;
-        border-radius: 8px;
-        border: none;
-        font-size: 16px;
+    .calculator-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    .calculator-header h2 {
+        margin: 0;
+        color: #333;
+    }
+    .tabs {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+    }
+    .tab {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
         cursor: pointer;
-        font-weight: 600;
-        transition: 0.2s;
+        color: #666;
+        font-weight: 500;
+        transition: 0.3s;
     }
-    .btn-next { background: var(--primary); color: white; }
-    .btn-next:hover { background: #000; }
-    .btn-prev { background: #dfe6e9; color: #2d3436; }
-    .btn-prev:hover { background: #b2bec3; }
-    .btn-add { background: #fdcb6e; color: #2d3436; margin-top: 10px; width: 100%; }
-
-    .calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 5px;
+    .tab.active {
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+        margin-bottom: -2px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #555;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+    .form-group input:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+    .results {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
         margin-top: 20px;
     }
-    .cal-header {
-        text-align: center;
+    .result-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+    .result-item.highlight {
         font-weight: bold;
-        font-size: 12px;
-        color: #b2bec3;
-        padding-bottom: 5px;
+        color: #007bff;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+        margin-top: 10px;
     }
-    .cal-day {
-        aspect-ratio: 1;
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        position: relative;
-        border: 1px solid #eee;
-    }
-    .cal-day.empty { background: transparent; border: none; }
-    .cal-day.good { background: var(--success); color: white; font-weight: bold; box-shadow: 0 2px 5px rgba(0,184,148,0.3); }
-    .cal-day.bad { background: #ff7675; color: white; opacity: 0.4; cursor: not-allowed; }
-    .cal-day.bad:hover::after {
-        content: attr(data-reason);
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #333;
+    .btn-calc {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
         color: white;
-        padding: 5px;
-        border-radius: 4px;
-        font-size: 10px;
-        white-space: nowrap;
-        z-index: 10;
-        pointer-events: none;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
     }
-    .legend {
-        display: flex;
-        gap: 15px;
-        margin-top: 15px;
-        font-size: 12px;
-        justify-content: center;
+    .btn-calc:hover {
+        background-color: #0056b3;
     }
-    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
 </style>
 </head>
 <body>
 
-<div class="wizard-card">
-    <div class="wizard-header">
-        <h3 style="margin:0;">Perfect Date Finder</h3>
-        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+<div class="calculator-card">
+    <div class="calculator-header">
+        <h2>Воронка Event-маркетинга</h2>
+        <p style="font-size: 12px; color: #888;">Рассчитайте бюджет или прогноз участников</p>
     </div>
 
-    <div class="step-content active" id="step1">
-        <h2>Step 1: General Timeframe</h2>
-        <p>Specify the date range (season) in which the event should theoretically take place.</p>
+    <div class="tabs">
+        <div class="tab active" onclick="switchMode('budget')">Есть бюджет</div>
+        <div class="tab" onclick="switchMode('goal')">Есть цель (участники)</div>
+    </div>
+
+    <div id="inputs">
         <div class="form-group">
-            <label>Start Date:</label>
-            <input type="date" id="startDate">
+            <label id="mainInputLabel">Рекламный бюджет (руб):</label>
+            <input type="number" id="mainValue" value="50000" placeholder="Например: 50000">
         </div>
+
         <div class="form-group">
-            <label>End Date:</label>
-            <input type="date" id="endDate">
+            <label>CPM (Стоимость 1000 показов, руб):</label>
+            <input type="number" id="cpm" value="250" step="0.1">
         </div>
-    </div>
-
-    <div class="step-content" id="step2">
-        <h2>Steps 2-3: External Constraints</h2>
-        <p>Add dates of Public Holidays, City Events, or potential Strikes to the block list.</p>
-        <div class="form-group">
-            <input type="date" id="blockDateInput_2">
-            <button class="btn-add" onclick="addBlockDate(2, 'Holiday/External Risk')">Block Date</button>
-            <div class="blocked-list" id="blockedList_2"></div>
-        </div>
-    </div>
-
-    <div class="step-content" id="step3">
-        <h2>Step 4: Key Resources</h2>
-        <p>Are your Key Speakers or Venue unavailable on certain days? Block them here.</p>
-        <div class="form-group">
-            <input type="date" id="blockDateInput_3">
-            <button class="btn-add" onclick="addBlockDate(3, 'Venue/Speaker Unavailable')">Block Date</button>
-            <div class="blocked-list" id="blockedList_3"></div>
-        </div>
-    </div>
-
-    <div class="step-content" id="step4">
-        <h2>Steps 5-6: Market & Team</h2>
-        <p>Exclude dates with Competing Events or when your Team is busy/on vacation.</p>
-        <div class="form-group">
-            <input type="date" id="blockDateInput_4">
-            <button class="btn-add" onclick="addBlockDate(4, 'Competitor/Team Busy')">Block Date</button>
-            <div class="blocked-list" id="blockedList_4"></div>
-        </div>
-    </div>
-
-    <div class="step-content" id="step5">
-        <h2>Step 7: Audience Preferences</h2>
-        <p>Select the weekdays that suit your audience. Unsuitable days will be removed.</p>
-        <div class="weekdays-grid">
-            <div class="weekday-check selected" onclick="toggleDay(this, 1)">Mon</div>
-            <div class="weekday-check selected" onclick="toggleDay(this, 2)">Tue</div>
-            <div class="weekday-check selected" onclick="toggleDay(this, 3)">Wed</div>
-            <div class="weekday-check selected" onclick="toggleDay(this, 4)">Thu</div>
-            <div class="weekday-check selected" onclick="toggleDay(this, 5)">Fri</div>
-            <div class="weekday-check selected" onclick="toggleDay(this, 6)">Sat</div>
-            <div class="weekday-check selected" onclick="toggleDay(this, 0)">Sun</div>
-        </div>
-    </div>
-
-    <div class="step-content" id="step6">
-        <h2>Final Calendar</h2>
-        <p>Green dates are your perfect candidates. Hover over red dates to see why they were blocked.</p>
         
-        <div id="calendarContainer"></div>
-        
-        <div class="legend">
-            <div><span class="dot" style="background:var(--success)"></span>Perfect Date</div>
-            <div><span class="dot" style="background:#ff7675"></span>Blocked</div>
+        <div class="form-group">
+            <label>CTR (Кликабельность, %):</label>
+            <input type="number" id="ctr" value="1.5" step="0.1">
         </div>
+
+        <div class="form-group">
+            <label>CR лендинга (Конверсия в регистрацию, %):</label>
+            <input type="number" id="cr_lp" value="20" step="0.1">
+        </div>
+
+        <div class="form-group">
+            <label>Show-up Rate (Доходимость до ивента, %):</label>
+            <input type="number" id="show_up" value="40" step="0.1">
+        </div>
+
+        <button class="btn-calc" onclick="calculate()">Рассчитать</button>
     </div>
 
-    <div class="wizard-footer">
-        <button class="btn-prev" id="prevBtn" onclick="changeStep(-1)" disabled>Back</button>
-        <button class="btn-next" id="nextBtn" onclick="changeStep(1)">Next</button>
+    <div class="results" id="results" style="display:none;">
+        <div class="result-item"><span>Показы рекламы:</span> <span id="res_impressions">-</span></div>
+        <div class="result-item"><span>Клики по рекламе:</span> <span id="res_clicks">-</span></div>
+        <div class="result-item"><span>Стоимость клика (CPC):</span> <span id="res_cpc">-</span></div>
+        <div class="result-item highlight"><span>Регистрации (Leads):</span> <span id="res_leads">-</span></div>
+        <div class="result-item"><span>Стоимость лида (CPL):</span> <span id="res_cpl">-</span></div>
+        <div class="result-item highlight" style="color: #28a745;"><span>Участники (Attendees):</span> <span id="res_attendees">-</span></div>
+        <div class="result-item"><span>Итоговый бюджет:</span> <span id="res_budget">-</span></div>
+        <div class="result-item"><span>Стоимость участника (CPA):</span> <span id="res_cpa">-</span></div>
     </div>
 </div>
 
 <script>
-    let currentStep = 1;
-    const totalSteps = 6;
-    
-    // Data Storage
-    let blockedDates = {}; // Format: "YYYY-MM-DD": "Reason"
-    let allowedWeekdays = [0,1,2,3,4,5,6]; // All allowed by default
+    let mode = 'budget'; // 'budget' or 'goal'
 
-    function changeStep(n) {
-        // Validation for Step 1
-        if (currentStep === 1 && n === 1) {
-            const start = document.getElementById('startDate').value;
-            const end = document.getElementById('endDate').value;
-            if(!start || !end) return alert("Please select a Start and End date.");
-            if(start > end) return alert("Start date cannot be after End date.");
-        }
+    function switchMode(newMode) {
+        mode = newMode;
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(t => t.classList.remove('active'));
+        
+        const label = document.getElementById('mainInputLabel');
+        const input = document.getElementById('mainValue');
 
-        document.getElementById(`step${currentStep}`).classList.remove('active');
-        currentStep += n;
-        document.getElementById(`step${currentStep}`).classList.add('active');
-        
-        // Update Buttons & Progress
-        document.getElementById('prevBtn').disabled = (currentStep === 1);
-        
-        const nextBtn = document.getElementById('nextBtn');
-        if (currentStep === totalSteps) {
-            nextBtn.style.display = 'none';
-            renderFinalCalendar();
+        if (mode === 'budget') {
+            tabs[0].classList.add('active');
+            label.textContent = 'Рекламный бюджет (руб):';
+            input.placeholder = 'Например: 50000';
+            input.value = 50000;
         } else {
-            nextBtn.style.display = 'block';
-            nextBtn.innerText = 'Next';
+            tabs[1].classList.add('active');
+            label.textContent = 'Цель по участникам (чел):';
+            input.placeholder = 'Например: 100';
+            input.value = 100;
         }
-        
-        let progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-        document.getElementById('progress').style.width = `${progress}%`;
+        document.getElementById('results').style.display = 'none';
     }
 
-    function addBlockDate(stepId, defaultReason) {
-        const input = document.getElementById(`blockDateInput_${stepId}`);
-        const date = input.value;
-        if (!date) return;
+    function calculate() {
+        // Получаем значения
+        let mainVal = parseFloat(document.getElementById('mainValue').value);
+        let cpm = parseFloat(document.getElementById('cpm').value);
+        let ctr = parseFloat(document.getElementById('ctr').value) / 100;
+        let cr_lp = parseFloat(document.getElementById('cr_lp').value) / 100;
+        let show_up = parseFloat(document.getElementById('show_up').value) / 100;
 
-        blockedDates[date] = defaultReason;
+        if (isNaN(mainVal) || mainVal <= 0) return alert('Введите корректное значение бюджета или цели');
 
-        const list = document.getElementById(`blockedList_${stepId}`);
-        const tag = document.createElement('div');
-        tag.className = 'blocked-tag';
-        tag.innerHTML = `${date} <span onclick="removeDate(this, '${date}')">&times;</span>`;
-        list.appendChild(tag);
-        
-        input.value = '';
-    }
+        let budget, attendees, leads, clicks, impressions;
 
-    function removeDate(el, date) {
-        delete blockedDates[date];
-        el.parentElement.remove();
-    }
-
-    function toggleDay(el, dayIndex) {
-        el.classList.toggle('selected');
-        if (allowedWeekdays.includes(dayIndex)) {
-            allowedWeekdays = allowedWeekdays.filter(d => d !== dayIndex);
+        if (mode === 'budget') {
+            budget = mainVal;
+            // Логика: Бюджет -> Показы -> Клики -> Лиды -> Участники
+            // CPM = Cost / (Impressions / 1000) => Impressions = (Budget / CPM) * 1000
+            impressions = (budget / cpm) * 1000;
+            clicks = impressions * ctr;
+            leads = clicks * cr_lp;
+            attendees = leads * show_up;
         } else {
-            allowedWeekdays.push(dayIndex);
+            attendees = mainVal;
+            // Логика обратная: Участники -> Лиды -> Клики -> Показы -> Бюджет
+            leads = attendees / show_up;
+            clicks = leads / cr_lp;
+            impressions = clicks / ctr;
+            budget = (impressions / 1000) * cpm;
         }
-    }
 
-    function renderFinalCalendar() {
-        const startStr = document.getElementById('startDate').value;
-        const endStr = document.getElementById('endDate').value;
-        const container = document.getElementById('calendarContainer');
-        container.innerHTML = ''; 
+        // Вычисляемые метрики
+        let cpc = clicks > 0 ? budget / clicks : 0;
+        let cpl = leads > 0 ? budget / leads : 0;
+        let cpa = attendees > 0 ? budget / attendees : 0;
 
-        let current = new Date(startStr);
-        const end = new Date(endStr);
+        // Вывод результатов (с округлением)
+        document.getElementById('res_impressions').textContent = Math.ceil(impressions).toLocaleString();
+        document.getElementById('res_clicks').textContent = Math.ceil(clicks).toLocaleString();
+        document.getElementById('res_cpc').textContent = cpc.toFixed(2) + ' руб.';
+        document.getElementById('res_leads').textContent = Math.ceil(leads).toLocaleString();
+        document.getElementById('res_cpl').textContent = cpl.toFixed(2) + ' руб.';
+        document.getElementById('res_attendees').textContent = Math.ceil(attendees).toLocaleString();
+        document.getElementById('res_budget').textContent = Math.ceil(budget).toLocaleString() + ' руб.';
+        document.getElementById('res_cpa').textContent = cpa.toFixed(2) + ' руб.';
 
-        const daysEn = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; // Eng headers
-        
-        let html = '<div class="calendar-grid">';
-        daysEn.forEach(d => html += `<div class="cal-header">${d}</div>`);
-        
-        // Fill empty slots for first week align (Sunday based for EN usually, but let's stick to Sun=0)
-        let firstDayOfWeek = current.getDay(); 
-        // Logic: if loop starts at Sun (0), we need 0 empty slots.
-        for(let i=0; i<firstDayOfWeek; i++) html += `<div class="cal-day empty"></div>`;
-
-        while (current <= end) {
-            const dateStr = current.toISOString().split('T')[0];
-            const dayOfWeek = current.getDay(); 
-            const dayNum = current.getDate();
-            
-            let isBad = false;
-            let reason = '';
-
-            if (blockedDates[dateStr]) {
-                isBad = true;
-                reason = blockedDates[dateStr];
-            }
-            else if (!allowedWeekdays.includes(dayOfWeek)) {
-                isBad = true;
-                reason = 'Weekday excluded';
-            }
-
-            if (isBad) {
-                html += `<div class="cal-day bad" data-reason="${reason}">${dayNum}</div>`;
-            } else {
-                html += `<div class="cal-day good">${dayNum}</div>`;
-            }
-
-            current.setDate(current.getDate() + 1);
-        }
-        
-        html += '</div>';
-        container.innerHTML = html;
+        document.getElementById('results').style.display = 'block';
     }
 </script>
 
