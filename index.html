@@ -128,14 +128,14 @@
 
         @media print {
             body { padding: 0; background: white; }
-            .container { max-width: 100%; border: none; padding: 0; gap: 20px; }
+            .container { max-width: 100%; border: none; padding: 0; gap: 20px; box-shadow: none; }
             .btn-download { display: none; }
             input { border: none; background: none; padding: 4px 0; font-weight: 600; }
             .result-card { box-shadow: none; border: 1px solid #eee; }
         }
 
         @media (max-width: 700px) {
-            .container { flex-direction: column; padding: 20px; }
+            .container { flex-direction: column; padding: 20px; gap: 20px; }
         }
     </style>
 </head>
@@ -210,11 +210,13 @@
         const ctr = parseFloat(document.getElementById('ctr').value) || 0;
         const cpc = parseFloat(document.getElementById('cpc').value) || 0;
 
-        const registrations = attRate > 0 ? Math.ceil(attendees / attRate) : 0;
-        const formVisits = formRate > 0 ? Math.ceil(registrations / formRate) : 0;
-        const websiteVisits = ctaRate > 0 ? Math.ceil(formVisits / ctaRate) : 0;
-        const adReach = ctr > 0 ? Math.ceil(websiteVisits / ctr) : 0;
+        // Математическое округление промежуточных этапов (людей)
+        const registrations = attRate > 0 ? Math.round(attendees / attRate) : 0;
+        const formVisits = formRate > 0 ? Math.round(registrations / formRate) : 0;
+        const websiteVisits = ctaRate > 0 ? Math.round(formVisits / ctaRate) : 0;
+        const adReach = ctr > 0 ? Math.round(websiteVisits / ctr) : 0;
         
+        // Финальный расчет бюджета (Visits * CPC)
         const budget = (websiteVisits * cpc).toFixed(2);
 
         document.getElementById('res-reg').innerText = registrations.toLocaleString();
