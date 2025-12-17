@@ -21,45 +21,53 @@
             color: var(--text-main);
             display: flex;
             justify-content: center;
-            padding: 10px;
+            align-items: flex-start;
+            padding: 20px;
             margin: 0;
+            min-height: 100vh;
         }
 
         .container {
             width: 100%;
-            max-width: 400px;
+            max-width: 850px;
             background: #ffffff;
-            padding: 16px;
-            border-radius: 16px;
+            padding: 32px;
+            border-radius: 20px;
+            display: flex;
+            gap: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02);
         }
 
+        .left-panel { flex: 1; }
+        .right-panel { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
         .header-brand {
-            font-size: 10px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-sec);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
-        h1 { font-size: 20px; font-weight: 800; margin: 0 0 16px 0; letter-spacing: -0.5px; }
+        h1 { font-size: 24px; font-weight: 800; margin: 0 0 24px 0; letter-spacing: -0.5px; }
         
-        .input-group { margin-bottom: 10px; }
+        .input-group { margin-bottom: 14px; }
         
         label {
             display: block;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text-sec);
-            margin-bottom: 4px;
-            margin-left: 2px;
+            margin-bottom: 6px;
+            margin-left: 4px;
         }
 
         input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 1px solid #e5e5ea;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 12px;
+            font-size: 16px;
             background: var(--ios-gray);
             box-sizing: border-box;
             transition: all 0.2s ease;
@@ -70,115 +78,127 @@
             outline: none;
             border-color: var(--ios-blue);
             background: #fff;
+            box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
         }
 
         .result-card {
             background: #fff;
             border: 1px solid #e5e5ea;
-            border-radius: 16px;
-            padding: 16px;
-            margin-top: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
         }
 
         .result-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
-            font-size: 13px;
+            margin-bottom: 16px;
+            font-size: 15px;
         }
 
         .result-item span:first-child { color: var(--text-sec); }
         .result-item span:last-child { font-weight: 600; color: var(--text-main); }
 
         .result-item.total {
-            margin-top: 12px;
-            padding-top: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
             border-top: 1px solid #f2f2f7;
+            margin-bottom: 0;
         }
 
-        .result-item.total span:first-child { font-weight: 700; color: var(--text-main); font-size: 15px; }
-        .result-item.total span:last-child { font-weight: 800; font-size: 20px; color: var(--ios-blue); }
+        .result-item.total span:first-child { font-weight: 700; color: var(--text-main); font-size: 17px; }
+        .result-item.total span:last-child { font-weight: 800; font-size: 28px; color: var(--ios-blue); }
 
         .btn-download {
             width: 100%;
             background: var(--ios-accent);
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 15px;
             font-weight: 600;
-            margin-top: 16px;
+            margin-top: 24px;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
+
+        .btn-download:hover { opacity: 0.8; }
 
         @media print {
             body { padding: 0; background: white; }
-            .container { max-width: 100%; border: none; padding: 0; }
+            .container { max-width: 100%; border: none; padding: 0; gap: 20px; }
             .btn-download { display: none; }
-            input { border: none; background: none; padding: 2px 0; font-weight: 600; }
+            input { border: none; background: none; padding: 4px 0; font-weight: 600; }
             .result-card { box-shadow: none; border: 1px solid #eee; }
+        }
+
+        @media (max-width: 700px) {
+            .container { flex-direction: column; padding: 20px; }
         }
     </style>
 </head>
 <body>
 
 <div class="container" id="calculator-content">
-    <div class="header-brand">Make it work</div>
-    <h1>Ad Budget Calculator</h1>
-    
-    <div class="input-group">
-        <label>Desired Attendees</label>
-        <input type="number" id="attendees" value="100" oninput="calculate()">
-    </div>
-
-    <div class="input-group">
-        <label>Attendance Rate (0.1 - 1.0)</label>
-        <input type="number" id="attRate" value="0.5" step="0.05" oninput="calculate()">
-    </div>
-
-    <div class="input-group">
-        <label>Form Completion Rate (0.1 - 1.0)</label>
-        <input type="number" id="formRate" value="0.6" step="0.05" oninput="calculate()">
-    </div>
-
-    <div class="input-group">
-        <label>Website CTA Click Rate</label>
-        <input type="number" id="ctaRate" value="0.2" step="0.05" oninput="calculate()">
-    </div>
-
-    <div class="input-group">
-        <label>Ad Click-Through Rate (CTR)</label>
-        <input type="number" id="ctr" value="0.01" step="0.001" oninput="calculate()">
-    </div>
-
-    <div class="input-group">
-        <label>Cost Per Click (CPC)</label>
-        <input type="number" id="cpc" value="0.20" step="0.01" oninput="calculate()">
-    </div>
-
-    <div class="result-card">
-        <div class="result-item">
-            <span>Required Registrations:</span>
-            <span id="res-reg">200</span>
+    <div class="left-panel">
+        <div class="header-brand">Make it work</div>
+        <h1>Ad Budget Calculator</h1>
+        
+        <div class="input-group">
+            <label>Desired Attendees</label>
+            <input type="number" id="attendees" value="100" oninput="calculate()">
         </div>
-        <div class="result-item">
-            <span>Required Website Visitors:</span>
-            <span id="res-visits">1,667</span>
+
+        <div class="input-group">
+            <label>Attendance Rate</label>
+            <input type="number" id="attRate" value="0.5" step="0.05" oninput="calculate()">
         </div>
-        <div class="result-item">
-            <span>Required Ad Reach:</span>
-            <span id="res-reach">166,700</span>
+
+        <div class="input-group">
+            <label>Form Completion Rate</label>
+            <input type="number" id="formRate" value="0.6" step="0.05" oninput="calculate()">
         </div>
-        <div class="result-item total">
-            <span>Estimated Total Budget:</span>
-            <span id="res-budget">333.40</span>
+
+        <div class="input-group">
+            <label>Website CTA Click Rate</label>
+            <input type="number" id="ctaRate" value="0.2" step="0.05" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label>Ad Click-Through Rate (CTR)</label>
+            <input type="number" id="ctr" value="0.01" step="0.001" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label>Cost Per Click (CPC)</label>
+            <input type="number" id="cpc" value="0.20" step="0.01" oninput="calculate()">
         </div>
     </div>
 
-    <button class="btn-download" onclick="downloadPDF()">Download PDF Report</button>
+    <div class="right-panel">
+        <div class="result-card">
+            <div class="result-item">
+                <span>Required Registrations:</span>
+                <span id="res-reg">200</span>
+            </div>
+            <div class="result-item">
+                <span>Required Website Visitors:</span>
+                <span id="res-visits">1,667</span>
+            </div>
+            <div class="result-item">
+                <span>Required Ad Reach:</span>
+                <span id="res-reach">166,700</span>
+            </div>
+            <div class="result-item total">
+                <span>Estimated Total Budget:</span>
+                <span id="res-budget">333.40</span>
+            </div>
+        </div>
+        
+        <button class="btn-download" onclick="downloadPDF()">Download PDF Report</button>
+    </div>
 </div>
 
 <script>
@@ -207,10 +227,10 @@
         const element = document.getElementById('calculator-content');
         const opt = {
             margin: [10, 10, 10, 10],
-            filename: `Event_Budget_Plan.pdf`,
+            filename: 'Event_Budget_Plan.pdf',
             image: { type: 'jpeg', quality: 1 },
             html2canvas: { scale: 3, useCORS: true, letterRendering: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
         };
         html2pdf().set(opt).from(element).save();
     }
