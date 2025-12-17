@@ -3,232 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Калькулятор Event-маркетинга</title>
 <style>
-    body {
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        background-color: #f4f4f4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-    }
-    .calculator-card {
-        background: #fff;
+    .event-calc-wrapper {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        max-width: 600px;
+        margin: 20px auto;
         padding: 30px;
+        background: #ffffff;
         border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 500px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border: 1px solid #e0e0e0;
     }
-    .calculator-header {
+    .event-calc-header {
         text-align: center;
         margin-bottom: 25px;
     }
-    .calculator-header h2 {
-        margin: 0;
+    .event-calc-header h3 {
+        margin: 0 0 10px 0;
         color: #333;
+        font-size: 24px;
     }
-    .tabs {
-        display: flex;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #eee;
-    }
-    .tab {
-        flex: 1;
-        text-align: center;
-        padding: 10px;
-        cursor: pointer;
+    .event-calc-header p {
+        margin: 0;
         color: #666;
-        font-weight: 500;
-        transition: 0.3s;
-    }
-    .tab.active {
-        color: #007bff;
-        border-bottom: 2px solid #007bff;
-        margin-bottom: -2px;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
         font-size: 14px;
-        color: #555;
     }
-    .form-group input {
+    .calc-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .calc-row:last-child {
+        border-bottom: none;
+    }
+    .calc-label {
+        flex: 1;
+        font-size: 15px;
+        color: #444;
+        padding-right: 15px;
+    }
+    .calc-input-group {
+        width: 120px;
+        position: relative;
+    }
+    .calc-input {
         width: 100%;
-        padding: 10px;
+        padding: 8px 10px;
         border: 1px solid #ddd;
         border-radius: 6px;
         font-size: 16px;
+        text-align: right;
         box-sizing: border-box;
     }
-    .form-group input:focus {
+    .calc-input:focus {
         border-color: #007bff;
         outline: none;
     }
-    .results {
-        background-color: #f8f9fa;
-        padding: 20px;
+    .calc-suffix {
+        position: absolute;
+        right: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 12px;
+        pointer-events: none;
+        display: none; /* Скрыто по умолчанию */
+    }
+    
+    /* Секция результатов */
+    .calc-results {
+        background: #f8f9fa;
         border-radius: 8px;
+        padding: 20px;
         margin-top: 20px;
     }
-    .result-item {
+    .result-row {
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
-        font-size: 15px;
+        font-size: 14px;
     }
-    .result-item.highlight {
+    .result-row.main {
         font-weight: bold;
-        color: #007bff;
-        border-top: 1px solid #ddd;
-        padding-top: 10px;
-        margin-top: 10px;
+        color: #000;
+        font-size: 18px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 2px solid #ddd;
     }
-    .btn-calc {
+    .result-value {
+        font-weight: 600;
+    }
+    .btn-calculate {
         width: 100%;
-        padding: 12px;
-        background-color: #007bff;
+        padding: 15px;
+        background-color: #ff4a4a; /* Цвет из вашего PDF */
         color: white;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         font-size: 16px;
+        font-weight: bold;
         cursor: pointer;
-        transition: 0.3s;
+        transition: 0.2s;
+        margin-top: 10px;
     }
-    .btn-calc:hover {
-        background-color: #0056b3;
+    .btn-calculate:hover {
+        background-color: #e03e3e;
+    }
+    .note {
+        font-size: 12px;
+        color: #888;
+        margin-top: 10px;
+        text-align: center;
     }
 </style>
 </head>
 <body>
 
-<div class="calculator-card">
-    <div class="calculator-header">
-        <h2>Воронка Event-маркетинга</h2>
-        <p style="font-size: 12px; color: #888;">Рассчитайте бюджет или прогноз участников</p>
+<div class="event-calc-wrapper">
+    <div class="event-calc-header">
+        <h3>Бюджет Event-маркетинга</h3>
+        <p>Расчет от желаемого количества участников</p>
     </div>
 
-    <div class="tabs">
-        <div class="tab active" onclick="switchMode('budget')">Есть бюджет</div>
-        <div class="tab" onclick="switchMode('goal')">Есть цель (участники)</div>
+    <div class="calc-row">
+        <div class="calc-label"><strong>1. Желаемое кол-во участников</strong><br><span style="font-size:12px;color:#888;">(Desired Attendance)</span></div>
+        <div class="calc-input-group">
+            <input type="number" id="desired_attendees" class="calc-input" value="100">
+        </div>
     </div>
 
-    <div id="inputs">
-        <div class="form-group">
-            <label id="mainInputLabel">Рекламный бюджет (руб):</label>
-            <input type="number" id="mainValue" value="50000" placeholder="Например: 50000">
+    <div class="calc-row">
+        <div class="calc-label">2. Доходимость до ивента<br><span style="font-size:12px;color:#888;">(Show-up Rate / Visiting)</span></div>
+        <div class="calc-input-group">
+            <input type="number" id="cr_visiting" class="calc-input" value="50" step="1">
         </div>
-
-        <div class="form-group">
-            <label>CPM (Стоимость 1000 показов, руб):</label>
-            <input type="number" id="cpm" value="250" step="0.1">
-        </div>
-        
-        <div class="form-group">
-            <label>CTR (Кликабельность, %):</label>
-            <input type="number" id="ctr" value="1.5" step="0.1">
-        </div>
-
-        <div class="form-group">
-            <label>CR лендинга (Конверсия в регистрацию, %):</label>
-            <input type="number" id="cr_lp" value="20" step="0.1">
-        </div>
-
-        <div class="form-group">
-            <label>Show-up Rate (Доходимость до ивента, %):</label>
-            <input type="number" id="show_up" value="40" step="0.1">
-        </div>
-
-        <button class="btn-calc" onclick="calculate()">Рассчитать</button>
     </div>
 
-    <div class="results" id="results" style="display:none;">
-        <div class="result-item"><span>Показы рекламы:</span> <span id="res_impressions">-</span></div>
-        <div class="result-item"><span>Клики по рекламе:</span> <span id="res_clicks">-</span></div>
-        <div class="result-item"><span>Стоимость клика (CPC):</span> <span id="res_cpc">-</span></div>
-        <div class="result-item highlight"><span>Регистрации (Leads):</span> <span id="res_leads">-</span></div>
-        <div class="result-item"><span>Стоимость лида (CPL):</span> <span id="res_cpl">-</span></div>
-        <div class="result-item highlight" style="color: #28a745;"><span>Участники (Attendees):</span> <span id="res_attendees">-</span></div>
-        <div class="result-item"><span>Итоговый бюджет:</span> <span id="res_budget">-</span></div>
-        <div class="result-item"><span>Стоимость участника (CPA):</span> <span id="res_cpa">-</span></div>
+    <div class="calc-row">
+        <div class="calc-label">3. Заполняемость формы регистрации<br><span style="font-size:12px;color:#888;">(Conversion Rate: Form)</span></div>
+        <div class="calc-input-group">
+            <input type="number" id="cr_form" class="calc-input" value="70" step="1">
+        </div>
     </div>
+
+    <div class="calc-row">
+        <div class="calc-label">4. Клики на кнопку "Регистрация"<br><span style="font-size:12px;color:#888;">(Conversion Rate: Website)</span></div>
+        <div class="calc-input-group">
+            <input type="number" id="cr_website" class="calc-input" value="20" step="1">
+        </div>
+    </div>
+
+    <div class="calc-row">
+        <div class="calc-label">5. Цена за клик (CPC)<br><span style="font-size:12px;color:#888;">(Cost Per Click)</span></div>
+        <div class="calc-input-group">
+            <input type="number" id="cpc" class="calc-input" value="0.20" step="0.01">
+        </div>
+    </div>
+
+    <div class="calc-row">
+        <div class="calc-label">6. CTR рекламы<br><span style="font-size:12px;color:#888;">(Click Through Rate)</span></div>
+        <div class="calc-input-group">
+            <input type="number" id="ctr" class="calc-input" value="5" step="0.1">
+        </div>
+    </div>
+
+    <button class="btn-calculate" onclick="calculateEventBudget()">Рассчитать бюджет</button>
+
+    <div class="calc-results" id="results_box" style="display:none;">
+        <div class="result-row">
+            <span>Нужно регистраций (Leads):</span>
+            <span class="result-value" id="res_registrations">-</span>
+        </div>
+        <div class="result-row">
+            <span>Открытий формы (Form Visitors):</span>
+            <span class="result-value" id="res_form_visitors">-</span>
+        </div>
+        <div class="result-row">
+            <span>Посетителей сайта (Website Visitors):</span>
+            <span class="result-value" id="res_site_visitors">-</span>
+        </div>
+        <div class="result-row">
+            <span>Охват рекламы (Impressions):</span>
+            <span class="result-value" id="res_impressions">-</span>
+        </div>
+        <div class="result-row main">
+            <span>Необходимый бюджет:</span>
+            <span class="result-value" id="res_budget" style="color:#ff4a4a;">-</span>
+        </div>
+    </div>
+    
+    <div class="note">Значения по умолчанию взяты из методички "Event Marketing on Social Media"</div>
 </div>
 
 <script>
-    let mode = 'budget'; // 'budget' or 'goal'
-
-    function switchMode(newMode) {
-        mode = newMode;
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(t => t.classList.remove('active'));
-        
-        const label = document.getElementById('mainInputLabel');
-        const input = document.getElementById('mainValue');
-
-        if (mode === 'budget') {
-            tabs[0].classList.add('active');
-            label.textContent = 'Рекламный бюджет (руб):';
-            input.placeholder = 'Например: 50000';
-            input.value = 50000;
-        } else {
-            tabs[1].classList.add('active');
-            label.textContent = 'Цель по участникам (чел):';
-            input.placeholder = 'Например: 100';
-            input.value = 100;
-        }
-        document.getElementById('results').style.display = 'none';
-    }
-
-    function calculate() {
-        // Получаем значения
-        let mainVal = parseFloat(document.getElementById('mainValue').value);
-        let cpm = parseFloat(document.getElementById('cpm').value);
+    function calculateEventBudget() {
+        // 1. Получение входных данных
+        let attendees = parseFloat(document.getElementById('desired_attendees').value);
+        let cr_visiting = parseFloat(document.getElementById('cr_visiting').value) / 100;
+        let cr_form = parseFloat(document.getElementById('cr_form').value) / 100;
+        let cr_website = parseFloat(document.getElementById('cr_website').value) / 100;
+        let cpc = parseFloat(document.getElementById('cpc').value);
         let ctr = parseFloat(document.getElementById('ctr').value) / 100;
-        let cr_lp = parseFloat(document.getElementById('cr_lp').value) / 100;
-        let show_up = parseFloat(document.getElementById('show_up').value) / 100;
 
-        if (isNaN(mainVal) || mainVal <= 0) return alert('Введите корректное значение бюджета или цели');
-
-        let budget, attendees, leads, clicks, impressions;
-
-        if (mode === 'budget') {
-            budget = mainVal;
-            // Логика: Бюджет -> Показы -> Клики -> Лиды -> Участники
-            // CPM = Cost / (Impressions / 1000) => Impressions = (Budget / CPM) * 1000
-            impressions = (budget / cpm) * 1000;
-            clicks = impressions * ctr;
-            leads = clicks * cr_lp;
-            attendees = leads * show_up;
-        } else {
-            attendees = mainVal;
-            // Логика обратная: Участники -> Лиды -> Клики -> Показы -> Бюджет
-            leads = attendees / show_up;
-            clicks = leads / cr_lp;
-            impressions = clicks / ctr;
-            budget = (impressions / 1000) * cpm;
+        if (!attendees || attendees <= 0) {
+            alert("Пожалуйста, введите желаемое количество участников.");
+            return;
         }
 
-        // Вычисляемые метрики
-        let cpc = clicks > 0 ? budget / clicks : 0;
-        let cpl = leads > 0 ? budget / leads : 0;
-        let cpa = attendees > 0 ? budget / attendees : 0;
+        // 2. Логика расчета (Reverse Funnel)
+        
+        // Шаг 1: Сколько нужно регистраций? (Attendees / Show-up Rate)
+        // Источник: PDF Page 3 [cite: 67, 68]
+        let registrations = attendees / cr_visiting;
 
-        // Вывод результатов (с округлением)
-        document.getElementById('res_impressions').textContent = Math.ceil(impressions).toLocaleString();
-        document.getElementById('res_clicks').textContent = Math.ceil(clicks).toLocaleString();
-        document.getElementById('res_cpc').textContent = cpc.toFixed(2) + ' руб.';
-        document.getElementById('res_leads').textContent = Math.ceil(leads).toLocaleString();
-        document.getElementById('res_cpl').textContent = cpl.toFixed(2) + ' руб.';
-        document.getElementById('res_attendees').textContent = Math.ceil(attendees).toLocaleString();
-        document.getElementById('res_budget').textContent = Math.ceil(budget).toLocaleString() + ' руб.';
-        document.getElementById('res_cpa').textContent = cpa.toFixed(2) + ' руб.';
+        // Шаг 2: Сколько людей должны открыть форму? (Registrations / Form Conversion)
+        // Источник: PDF Page 4 
+        let form_visitors = registrations / cr_form;
 
-        document.getElementById('results').style.display = 'block';
+        // Шаг 3: Сколько посетителей сайта нужно? (Form Visitors / Website Button Click Rate)
+        // Источник: PDF Page 4 [cite: 93, 97]
+        let site_visitors = form_visitors / cr_website;
+
+        // Шаг 4: Бюджет (Site Visitors * CPC)
+        // В PDF подразумевается, что "посетитель" = "платный клик".
+        // Источник: PDF Page 5 
+        let budget = site_visitors * cpc;
+
+        // Дополнительно: Охват (Impressions = Clicks / CTR)
+        // Источник: PDF Page 5 [cite: 110, 116]
+        let impressions = site_visitors / ctr;
+
+        // 3. Вывод результатов (с округлением в большую сторону, т.к. нельзя привести полчеловека)
+        document.getElementById('res_registrations').innerText = Math.ceil(registrations).toLocaleString();
+        document.getElementById('res_form_visitors').innerText = Math.ceil(form_visitors).toLocaleString();
+        document.getElementById('res_site_visitors').innerText = Math.ceil(site_visitors).toLocaleString();
+        document.getElementById('res_impressions').innerText = Math.ceil(impressions).toLocaleString();
+        
+        // Форматирование бюджета
+        document.getElementById('res_budget').innerText = Math.ceil(budget).toLocaleString() + ' у.е.';
+
+        // Показать блок результатов
+        document.getElementById('results_box').style.display = 'block';
     }
 </script>
 
