@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youcanmakeit.work: Social Media Ad Budget Calculator for Free Events</title>
+    <title>Make it work: Ad Budget Calculator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --ios-bg: #ffffff;
             --ios-gray: #f2f2f7;
-            --ios-accent: #000000; /* Минимализм: черный акцент */
+            --ios-accent: #000000;
             --ios-blue: #007aff;
             --text-main: #000000;
             --text-sec: #8e8e93;
@@ -21,45 +21,45 @@
             color: var(--text-main);
             display: flex;
             justify-content: center;
-            padding: 20px;
+            padding: 10px;
             margin: 0;
         }
 
         .container {
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
             background: #ffffff;
-            padding: 24px;
-            border-radius: 20px;
+            padding: 16px;
+            border-radius: 16px;
         }
 
         .header-brand {
-            font-size: 12px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-sec);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
-        h1 { font-size: 24px; font-weight: 800; margin: 0 0 24px 0; letter-spacing: -0.5px; }
+        h1 { font-size: 20px; font-weight: 800; margin: 0 0 16px 0; letter-spacing: -0.5px; }
         
-        .input-group { margin-bottom: 16px; }
+        .input-group { margin-bottom: 10px; }
         
         label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             color: var(--text-sec);
-            margin-bottom: 6px;
-            margin-left: 4px;
+            margin-bottom: 4px;
+            margin-left: 2px;
         }
 
         input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 10px 12px;
             border: 1px solid #e5e5ea;
-            border-radius: 12px;
-            font-size: 17px;
+            border-radius: 10px;
+            font-size: 15px;
             background: var(--ios-gray);
             box-sizing: border-box;
             transition: all 0.2s ease;
@@ -70,60 +70,55 @@
             outline: none;
             border-color: var(--ios-blue);
             background: #fff;
-            box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
         }
 
         .result-card {
             background: #fff;
             border: 1px solid #e5e5ea;
-            border-radius: 20px;
-            padding: 24px;
-            margin-top: 32px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.04);
         }
 
         .result-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            font-size: 15px;
+            margin-bottom: 8px;
+            font-size: 13px;
         }
 
         .result-item span:first-child { color: var(--text-sec); }
         .result-item span:last-child { font-weight: 600; color: var(--text-main); }
 
         .result-item.total {
-            margin-top: 18px;
-            padding-top: 18px;
+            margin-top: 12px;
+            padding-top: 12px;
             border-top: 1px solid #f2f2f7;
         }
 
-        .result-item.total span:first-child { font-weight: 700; color: var(--text-main); font-size: 17px; }
-        .result-item.total span:last-child { font-weight: 800; font-size: 24px; color: var(--ios-blue); }
+        .result-item.total span:first-child { font-weight: 700; color: var(--text-main); font-size: 15px; }
+        .result-item.total span:last-child { font-weight: 800; font-size: 20px; color: var(--ios-blue); }
 
         .btn-download {
             width: 100%;
             background: var(--ios-accent);
             color: white;
             border: none;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
             font-weight: 600;
-            margin-top: 24px;
+            margin-top: 16px;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
 
-        .btn-download:hover { opacity: 0.8; }
-
-        /* PDF & Print optimization */
         @media print {
             body { padding: 0; background: white; }
             .container { max-width: 100%; border: none; padding: 0; }
             .btn-download { display: none; }
-            input { border: none; background: none; padding: 4px 0; font-weight: 600; }
+            input { border: none; background: none; padding: 2px 0; font-weight: 600; }
             .result-card { box-shadow: none; border: 1px solid #eee; }
         }
     </style>
@@ -131,36 +126,31 @@
 <body>
 
 <div class="container" id="calculator-content">
-    <div class="header-brand">youcanmakeit.work</div>
-    <h1>Social Media Budget Calculator for Free Events</h1>
+    <div class="header-brand">Make it work</div>
+    <h1>Ad Budget Calculator</h1>
     
-    <div class="input-group">
-        <label>Event Name</label>
-        <input type="text" id="eventName" value="Test Event">
-    </div>
-
     <div class="input-group">
         <label>Desired Attendees</label>
         <input type="number" id="attendees" value="100" oninput="calculate()">
     </div>
 
     <div class="input-group">
-        <label>Attendance Rate (Estimate: 0.5 - 0.65)</label>
+        <label>Attendance Rate (0.1 - 1.0)</label>
         <input type="number" id="attRate" value="0.5" step="0.05" oninput="calculate()">
     </div>
 
     <div class="input-group">
-        <label>Form Completion Rate (Estimate: 0.5 - 0.7)</label>
+        <label>Form Completion Rate (0.1 - 1.0)</label>
         <input type="number" id="formRate" value="0.6" step="0.05" oninput="calculate()">
     </div>
 
     <div class="input-group">
-        <label>Website CTA Click Rate (Estimate: 0.2)</label>
+        <label>Website CTA Click Rate</label>
         <input type="number" id="ctaRate" value="0.2" step="0.05" oninput="calculate()">
     </div>
 
     <div class="input-group">
-        <label>Ad Click-Through Rate (CTR, Estimate: 0.01)</label>
+        <label>Ad Click-Through Rate (CTR)</label>
         <input type="number" id="ctr" value="0.01" step="0.001" oninput="calculate()">
     </div>
 
@@ -200,14 +190,12 @@
         const ctr = parseFloat(document.getElementById('ctr').value) || 0;
         const cpc = parseFloat(document.getElementById('cpc').value) || 0;
 
-        // Logic based on the guide's reverse calculation
-        const registrations = attRate > 0 ? Math.ceil(attendees / attRate) : 0; [cite: 139]
-        const formVisits = formRate > 0 ? Math.ceil(registrations / formRate) : 0; [cite: 152]
-        const websiteVisits = ctaRate > 0 ? Math.ceil(formVisits / ctaRate) : 0; [cite: 161]
-        const adReach = ctr > 0 ? Math.ceil(websiteVisits / ctr) : 0; [cite: 173]
+        const registrations = attRate > 0 ? Math.ceil(attendees / attRate) : 0;
+        const formVisits = formRate > 0 ? Math.ceil(registrations / formRate) : 0;
+        const websiteVisits = ctaRate > 0 ? Math.ceil(formVisits / ctaRate) : 0;
+        const adReach = ctr > 0 ? Math.ceil(websiteVisits / ctr) : 0;
         
-        // Final estimated budget (Multiplication: Visits * CPC)
-        const budget = (websiteVisits * cpc).toFixed(2); [cite: 186]
+        const budget = (websiteVisits * cpc).toFixed(2);
 
         document.getElementById('res-reg').innerText = registrations.toLocaleString();
         document.getElementById('res-visits').innerText = websiteVisits.toLocaleString();
@@ -217,10 +205,9 @@
 
     function downloadPDF() {
         const element = document.getElementById('calculator-content');
-        const eventName = document.getElementById('eventName').value || 'Event';
         const opt = {
             margin: [10, 10, 10, 10],
-            filename: `Budget_Plan_${eventName}.pdf`,
+            filename: `Event_Budget_Plan.pdf`,
             image: { type: 'jpeg', quality: 1 },
             html2canvas: { scale: 3, useCORS: true, letterRendering: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
